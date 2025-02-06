@@ -158,7 +158,7 @@ class AlternatingStyleStrategy
 
   Color _getFillColor(ThemeData theme, int index, int itemCount) {
     final color = theme.colorScheme.primary;
-    final background = theme.colorScheme.background;
+    final background = theme.colorScheme.surface;
     final opacity = itemCount % 2 == 1 && index == 0
         ? 0.7 // TODO: make 0.75
         : index % 2 == 0
