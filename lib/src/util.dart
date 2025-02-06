@@ -40,10 +40,3 @@ extension PointX on _math.Point<double> {
     );
   }
 }
-
-typedef DoubleSelector<T> = double Function(T source);
-
-extension DoubleSum<T> on Iterable<T> {
-  double sum(DoubleSelector selector) =>
-      fold(0.0, (previousValue, element) => previousValue + selector(element));
-}

@@ -12,8 +12,6 @@ class FortuneItem implements GestureHandler {
   /// A widget to be rendered within this item.
   final Widget child;
 
-  final double weight;
-
   @override
   final GestureTapCallback? onDoubleTap;
 
@@ -155,7 +153,6 @@ class FortuneItem implements GestureHandler {
   const FortuneItem({
     this.style,
     required this.child,
-    this.weight = 1,
     this.onTap,
     this.onTapUp,
     this.onDoubleTap,
@@ -226,8 +223,6 @@ class TransformedFortuneItem implements FortuneItem {
   }) : _item = item;
 
   Widget get child => _item.child;
-
-  double get weight => _item.weight;
 
   FortuneItemStyle? get style => _item.style;
 
