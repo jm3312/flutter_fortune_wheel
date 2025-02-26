@@ -13,27 +13,6 @@ class FortuneWheelPage extends HookWidget {
     context.goNamed(kRouteName);
   }
 
-  List<FortuneItem> _getItems() {
-    debugPrint('jella-get new item list');
-    final _iList = <FortuneItem>[];
-    final items = Constants.fortuneValues;
-
-    for (var it in items) {
-      if (items.indexOf(it) == 0) {
-        debugPrint('jella');
-        _iList.add(
-          FortuneItem(child: Text(it), weight: 0.5),
-        );
-      } else {
-        _iList.add(
-          FortuneItem(child: Text(it)),
-        );
-      }
-    }
-
-    return _iList;
-  }
-
   @override
   Widget build(BuildContext context) {
     final alignment = useState(Alignment.topCenter);
@@ -79,7 +58,10 @@ class FortuneWheelPage extends HookWidget {
                     child: TriangleIndicator(),
                   ),
                 ],
-                items: _getItems(),
+                items: [
+                  for (var it in Constants.fortuneValues)
+                    FortuneItem(child: Text(it), onTap: () => print(it))
+                ],
               ),
             ),
           ],

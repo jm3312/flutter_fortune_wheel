@@ -27,38 +27,6 @@ class ExamplePage extends StatefulWidget {
 class _ExamplePageState extends State<ExamplePage> {
   StreamController<int> selected = StreamController<int>();
 
-  final items = <String>[
-    'Jeh',
-    'Grogu',
-    'Mace Windu',
-    'Obi-Wan Kenobi',
-    'Han Solo',
-    'Luke Skywalker',
-    'Darth Vader',
-    'Yoda',
-    'Ahsoka Tano',
-  ];
-
-  List<FortuneItem> _getItems() {
-    debugPrint('jella-get new item list');
-    final _iList = <FortuneItem>[];
-
-    for (var it in items) {
-      if (items.indexOf(it) == 0) {
-        debugPrint('jella');
-        _iList.add(
-          FortuneItem(child: Text(it), weight: 0.5),
-        );
-      } else {
-        _iList.add(
-          FortuneItem(child: Text(it)),
-        );
-      }
-    }
-
-    return _iList;
-  }
-
   @override
   void dispose() {
     selected.close();
@@ -67,6 +35,17 @@ class _ExamplePageState extends State<ExamplePage> {
 
   @override
   Widget build(BuildContext context) {
+    final items = <String>[
+      'Grogu',
+      'Mace Windu',
+      'Obi-Wan Kenobi',
+      'Han Solo',
+      'Luke Skywalker',
+      'Darth Vader',
+      'Yoda',
+      'Ahsoka Tano',
+    ];
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Flutter Fortune Wheel'),
@@ -84,7 +63,9 @@ class _ExamplePageState extends State<ExamplePage> {
             Expanded(
               child: FortuneWheel(
                 selected: selected.stream,
-                items: _getItems(),
+                items: [
+                  for (var it in items) FortuneItem(child: Text(it)),
+                ],
               ),
             ),
           ],

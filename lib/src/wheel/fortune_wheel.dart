@@ -3,9 +3,7 @@ part of 'wheel.dart';
 enum HapticImpact { none, light, medium, heavy }
 
 Offset _calculateWheelOffset(
-  BoxConstraints constraints,
-  TextDirection textDirection,
-) {
+    BoxConstraints constraints, TextDirection textDirection) {
   final smallerSide = getSmallerSide(constraints);
   var offsetX = constraints.maxWidth / 2;
   if (textDirection == TextDirection.rtl) {
@@ -14,13 +12,8 @@ Offset _calculateWheelOffset(
   return Offset(offsetX, constraints.maxHeight / 2);
 }
 
-double _calculateSliceAngle(
-  int index,
-  int itemCount,
-  double weight,
-  double totalWeights,
-) {
-  final anglePerChild = 2 * _math.pi * weight / totalWeights;
+double _calculateSliceAngle(int index, int itemCount) {
+  final anglePerChild = 2 * _math.pi / itemCount;
   final childAngle = anglePerChild * index;
   // first slice starts at 90 degrees, if 0 degrees is at the top.
   // The angle offset puts the center of the first slice at the top.
@@ -64,7 +57,6 @@ class _WheelData {
   final BoxConstraints constraints;
   final int itemCount;
   final TextDirection textDirection;
-  final double totalWeights;
 
   late final double smallerSide = getSmallerSide(constraints);
   late final double largerSide = getLargerSide(constraints);
@@ -76,12 +68,11 @@ class _WheelData {
   );
   late final double diameter = smallerSide;
   late final double radius = diameter / 2;
-  late final double itemAngle = 2 * _math.pi / totalWeights;
+  late final double itemAngle = 2 * _math.pi / itemCount;
 
   _WheelData({
     required this.constraints,
     required this.itemCount,
-    required this.totalWeights,
     required this.textDirection,
   });
 }
@@ -193,9 +184,6 @@ class FortuneWheel extends HookWidget implements FortuneWidget {
         assert(items.length > 1),
         super(key: key);
 
-  /// Total weight count of the [items]
-  late final totalWeights = items.sum((unit) => unit.weight);
-
   @override
   Widget build(BuildContext context) {
     // Arrow animation: Setting up the AnimationController and Animation
@@ -285,7 +273,6 @@ class FortuneWheel extends HookWidget implements FortuneWidget {
                   final wheelData = _WheelData(
                     constraints: constraints,
                     itemCount: items.length,
-                    totalWeights: totalWeights,
                     textDirection: Directionality.of(context),
                   );
 
@@ -296,8 +283,7 @@ class FortuneWheel extends HookWidget implements FortuneWidget {
                   final panAngle =
                       panState.distance * panFactor * isAnimatingPanFactor;
                   final rotationAngle = _getAngle(rotateAnim.value);
-                  final alignmentOffset =
-                      _calculateAlignmentOffset(alignment) - 0.02;
+                  final alignmentOffset = _calculateAlignmentOffset(alignment);
                   final totalAngle = selectedAngle + panAngle + rotationAngle;
 
                   final focusedIndex = _borderCross(
@@ -317,12 +303,7 @@ class FortuneWheel extends HookWidget implements FortuneWidget {
                         item: items[i],
                         angle: totalAngle +
                             alignmentOffset +
-                            _calculateSliceAngle(
-                              i,
-                              items.length,
-                              items[i].weight,
-                              totalWeights,
-                            ),
+                            _calculateSliceAngle(i, items.length),
                         offset: wheelData.offset,
                       ),
                   ];
